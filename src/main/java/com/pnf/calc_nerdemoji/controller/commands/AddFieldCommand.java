@@ -9,6 +9,7 @@ import com.pnf.calc_nerdemoji.model.CalcDynamicField;
 import com.pnf.calc_nerdemoji.model.CalcValueType;
 import com.pnf.calc_nerdemoji.view.Terminal;
 
+import java.util.List;
 import java.util.Objects;
 
 public class AddFieldCommand implements ICommandRunnable {
@@ -17,8 +18,8 @@ public class AddFieldCommand implements ICommandRunnable {
     public boolean run(Controller controller, String[] args) {
         QuestionSet questions = QuestionSet.of(
                 Question.ofString("Field Name"),
-                Question.ofFloat("Amount"),
-                Question.ofEnum("Type", CalcValueType.class)
+                Question.ofFloat("Field Value"),
+                Question.ofEnum("Field Type", CalcValueType.class)
         );
 
         QuestionResult result = switch (args.length) {
@@ -47,7 +48,7 @@ public class AddFieldCommand implements ICommandRunnable {
     }
 
     @Override
-    public String help() {
-        return null;
+    public CommandHelp help() {
+        return CommandHelp.of("Adds a new field to a bill", List.of("add_field", "add_field <field-name> <field-value> <field-type>"), List.of("add_field Rent 750.43 m"));
     }
 }

@@ -5,7 +5,7 @@ import com.pnf.calc_nerdemoji.controller.Controller;
 public interface ICommandRunnable {
     boolean run(Controller controller, String[] args);
     boolean preChecks(Controller controller, String[] args);
-    String help();
+    CommandHelp help();
 
     /**
      * Executes this.run(null)

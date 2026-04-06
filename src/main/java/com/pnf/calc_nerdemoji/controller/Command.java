@@ -14,7 +14,8 @@ public enum Command implements ITerminalPickable {
     SUM_BILL(new SumBillCommand(), "sum"),
     LIST_FIELDS(new ListFieldsCommand(), "list"),
     LOAD_CONTEXT(new LoadFileCommand(), "load", "load_file"),
-    SAVE_CONTEXT(new SaveFileCommand(), "save");
+    SAVE_CONTEXT(new SaveFileCommand(), "save"),
+    DELETE_CONTEXT(new DeleteFileCommand(), "delete");
 
     private final ICommandRunnable runner;
     private final List<String> aliases;

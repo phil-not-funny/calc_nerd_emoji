@@ -25,7 +25,7 @@ public class SumBillCommand implements ICommandRunnable{
 
 
     @Override
-    public String help() {
+    public CommandHelp help() {
         return null;
     }
 }

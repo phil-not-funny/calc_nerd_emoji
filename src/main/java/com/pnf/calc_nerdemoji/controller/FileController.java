@@ -45,7 +45,7 @@ public class FileController {
     public OperationResult<Boolean> saveContext(CalcContext context, File file) {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, context);
-            controller.getMemory().set(Memory.LAST_FILE, file);
+            controller.getMemory().set(Memory.LAST_FILE, file.getAbsolutePath());
             return OperationResult.from(true);
         } catch (IOException e) {
             return OperationResult.from(false, OperationResult.Result.ERROR, "Unexpected error occurred while saving current session:\n" + e.getMessage());
@@ -71,6 +71,12 @@ public class FileController {
         } catch (IOException e) {
             return OperationResult.fail("An error occurred whilst trying to load internal data:\n" + e.getMessage());
         }
+    }
+
+    public File getOrDefault(String path, File defaultFile) {
+        File file = new File(path);
+        if(file.exists()) return file;
+        return defaultFile;
     }
 
     public OperationResult<File> fileFromTerminalInput(String arg, boolean create) {

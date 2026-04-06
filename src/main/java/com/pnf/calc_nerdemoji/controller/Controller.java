@@ -20,7 +20,7 @@ public class Controller {
         this.view = view;
         this.fileController = new FileController(this);
         this.context = CalcContext.empty();
-        this.memory = new Memory();
+        this.memory = new Memory(this);
     }
 
     public void runCommand(ICommandRunnable runnable, String[] args) {
@@ -32,14 +32,22 @@ public class Controller {
     public void initApp() {
         var memoryResult = fileController.loadMemory();
         if (!memoryResult.isErrored()) {
-            this.memory = memoryResult.value();
+            memory = memoryResult.value();
+            memory.setController(this);
         }
 
-        var contextResult = fileController.loadContext(memory.get(Memory.LAST_FILE, FileController.DATA));
+        File startFile = new File(memory.get(Memory.LAST_FILE, FileController.DATA.getAbsolutePath()));
+        if (!startFile.exists()) {
+            memory.set(Memory.LAST_FILE, FileController.DATA.getAbsolutePath());
+            startFile = FileController.DATA;
+        }
+
+        var contextResult = fileController.loadContext(startFile);
         if (!contextResult.announcedIsErrored()) {
             this.context = contextResult.announcedValue();
-            Terminal.info("Loaded session from " + FileController.DATA.getAbsolutePath());
+            Terminal.info("Loaded session from " + memory.get(Memory.LAST_FILE));
         }
+
 
         view.runTerminal(this);
     }

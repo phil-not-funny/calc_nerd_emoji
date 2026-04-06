@@ -1,7 +1,9 @@
 package com.pnf.calc_nerdemoji.controller;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pnf.calc_nerdemoji.view.Terminal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,30 +13,53 @@ public class Memory {
     public static final String LAST_FILE = "last_saved_file";
 
     @JsonProperty
-    private final Map<String, Object> memory;
+    private final Map<String, String> memory;
+
+    @JsonIgnore
+    private Controller controller;
 
     @JsonCreator
-    private Memory(@JsonProperty("memory") Map<String, Object> memory) {
+    private Memory(@JsonProperty("memory") Map<String, String> memory) {
         this.memory = memory;
     }
 
-    public Memory() {
+    public Memory(Controller controller) {
         this.memory = new HashMap<>();
+        this.controller = controller;
     }
 
-    public Object get(String key) {
+    public String get(String key) {
         return memory.get(key);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T get(String key, Object defaultValue) {
-        Object o = memory.get(key);
-        if(memory.isEmpty()) set(key, defaultValue);
-        return (T) ((T) o != null ? o : defaultValue);
+    public String get(String key, String defaultValue) {
+        String value = memory.get(key);
+        if(value == null) {
+            set(key, defaultValue);
+            return defaultValue;
+        }
+        return value;
     }
 
-    public void set(String key, Object o) {
-        memory.put(key, o);
+    public String writeIfUnexpected(String key, String defaultValue, String expected) {
+        String actual = get(key, defaultValue);
+        if(actual == null || !actual.equalsIgnoreCase(expected)) {
+            set(key, defaultValue);
+            return defaultValue;
+        }
+        return actual;
+    }
 
+    public void set(String key, String value) {
+        memory.put(key, value);
+        controller.getFileController().saveMemory();
+    }
+
+    public Controller getController() {
+        return controller;
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }

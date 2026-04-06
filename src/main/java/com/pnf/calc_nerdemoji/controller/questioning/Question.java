@@ -6,6 +6,7 @@ import com.pnf.calc_nerdemoji.view.Terminal;
 
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Question<T> {
     private final String field;
@@ -70,8 +71,8 @@ public class Question<T> {
                 field,
                 "Option",
                 null,
-                (s) -> validateEnum(field, clazz),
-                () -> Terminal.logEnum(Terminal.Level.QUESTION, clazz, "# %s (Select):".formatted(field)),
+                (s) -> validateEnum(s, clazz),
+                () -> Terminal.logEnum(Terminal.Level.QUESTION, clazz, "# %s (Select one of:)".formatted(field)),
                 clazz
         );
     }
@@ -81,7 +82,7 @@ public class Question<T> {
                 field,
                 "Option",
                 defaultValue,
-                (s) -> validateEnum(field, clazz),
+                (s) -> validateEnum(s, clazz),
                 () -> Terminal.logEnum(Terminal.Level.QUESTION, clazz, "# %s (Select):".formatted(field)),
                 clazz
         );

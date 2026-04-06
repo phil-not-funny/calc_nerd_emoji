@@ -19,17 +19,17 @@ public class SaveFileCommand implements ICommandRunnable{
 
     @Override
     public boolean preChecks(Controller controller, String[] args) {
-        boolean argsLength = CommandHelper.requireArgsLength(args, 1);
-        boolean notIllegal = CommandHelper.requireTrue(
-                Arrays.stream(FileController.illegalFileNames).noneMatch(s -> s.equalsIgnoreCase(args[0])),
-                "%s is an illegal file name!".formatted(args[0])
-        );
-        return argsLength && notIllegal;
+        return CommandHelper.requireArgsLength(args, 1) &&
+                CommandHelper.requireTrue(
+                        Arrays.stream(FileController.illegalFileNames).
+                                noneMatch(s -> s.equalsIgnoreCase(args[0])),
+                        "%s is an illegal file name!".formatted(args[0])
+                );
     }
 
 
     @Override
-    public String help() {
+    public CommandHelp help() {
         return null;
     }
 }

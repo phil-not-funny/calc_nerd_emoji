@@ -21,7 +21,7 @@ public class SimpleOutputCommand implements ICommandRunnable {
 
 
     @Override
-    public String help() {
+    public CommandHelp help() {
         return null;
     }
 }

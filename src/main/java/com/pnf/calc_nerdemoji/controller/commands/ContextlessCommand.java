@@ -6,9 +6,7 @@ import com.pnf.calc_nerdemoji.view.Terminal;
 
 public class ContextlessCommand implements ICommandRunnable {
     public static ICommandRunnable helpCommand() {
-        return new ContextlessCommand(() -> {
-            Terminal.logEnum(Terminal.Level.INFO, Command.class, "Available Commands are:");
-        });
+        return new ContextlessCommand(Terminal::logHelp);
     }
 
     public static ContextlessCommand toContextless(ICommandRunnable commandRunnable) {
@@ -33,7 +31,7 @@ public class ContextlessCommand implements ICommandRunnable {
     }
 
     @Override
-    public String help() {
+    public CommandHelp help() {
         return null;
     }
 }

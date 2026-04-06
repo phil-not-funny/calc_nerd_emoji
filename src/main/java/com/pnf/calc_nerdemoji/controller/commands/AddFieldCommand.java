@@ -1,0 +1,53 @@
+package com.pnf.calc_nerdemoji.controller.commands;
+
+import com.pnf.calc_nerdemoji.controller.Controller;
+import com.pnf.calc_nerdemoji.controller.questioning.Question;
+import com.pnf.calc_nerdemoji.controller.questioning.QuestionResult;
+import com.pnf.calc_nerdemoji.controller.questioning.QuestionSet;
+import com.pnf.calc_nerdemoji.model.CalcBill;
+import com.pnf.calc_nerdemoji.model.CalcDynamicField;
+import com.pnf.calc_nerdemoji.model.CalcValueType;
+import com.pnf.calc_nerdemoji.view.Terminal;
+
+import java.util.Objects;
+
+public class AddFieldCommand implements ICommandRunnable {
+
+    @Override
+    public boolean run(Controller controller, String[] args) {
+        QuestionSet questions = QuestionSet.of(
+                Question.ofString("Field Name"),
+                Question.ofFloat("Amount"),
+                Question.ofEnum("Type", CalcValueType.class)
+        );
+
+        QuestionResult result = switch (args.length) {
+            case 0 -> questions.prompt(controller);
+            case 3 -> questions.fromArgs(args);
+            default -> null;
+        };
+
+        String name = result.get(0, String.class);
+        float amount = result.get(1, Float.class);
+        CalcValueType type = result.get(2, CalcValueType.class);
+
+        CalcDynamicField field = CalcDynamicField.createField(amount, name, type).announcedValue();
+
+        CalcBill bill = CommandHelper.questionBill(controller);
+        bill.addField(field);
+
+        Terminal.log(Terminal.Level.DEBUG, bill.getFields().toString());
+        controller.save();
+        return true;
+    }
+
+    @Override
+    public boolean preChecks(Controller controller, String[] args) {
+        return CommandHelper.requireArgsLength(args, 0, 3);
+    }
+
+    @Override
+    public String help() {
+        return null;
+    }
+}

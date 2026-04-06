@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public enum Command implements ITerminalPickable {
     HELP(ContextlessCommand.helpCommand(), "?", "h"),
-    EXIT(ContextlessCommand.exitCommand(), "bye"),
+    EXIT(SimpleCommand.exitCommand(), "bye"),
     HELLO(new SimpleOutputCommand("Hello Mr. Stark")),
     ADD_FIELD(new AddFieldCommand(), "add"),
     SUM_BILL(new SumBillCommand(), "sum"),

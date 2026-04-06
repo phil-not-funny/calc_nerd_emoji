@@ -13,6 +13,9 @@ public class FileController {
     private static final String SEPARATOR = FileSystems.getDefault().getSeparator();
     public static final File ROOT = new File(System.getProperty("user.home") + SEPARATOR + ".calc_nerd");
     public static final File DATA = new File(ROOT.getAbsolutePath() + SEPARATOR + "data.json");
+    public static final File MEMORY = new File(ROOT.getAbsolutePath() + SEPARATOR + "preferences.json");
+
+    public static String[] illegalFileNames = {"preferences"};
 
     static {
         ROOT.mkdir();
@@ -42,6 +45,7 @@ public class FileController {
     public OperationResult<Boolean> saveContext(CalcContext context, File file) {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, context);
+            controller.getMemory().set(Memory.LAST_FILE, file);
             return OperationResult.from(true);
         } catch (IOException e) {
             return OperationResult.from(false, OperationResult.Result.ERROR, "Unexpected error occurred while saving current session:\n" + e.getMessage());
@@ -50,6 +54,23 @@ public class FileController {
 
     public OperationResult<Boolean> saveContext(CalcContext context) {
         return saveContext(context, DATA);
+    }
+
+    public OperationResult<Boolean> saveMemory() {
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(MEMORY, controller.getMemory());
+            return OperationResult.from(true);
+        } catch (IOException e) {
+            return OperationResult.fail("An error occurred whilst trying to store internal data:\n" + e.getMessage());
+        }
+    }
+
+    public OperationResult<Memory> loadMemory() {
+        try {
+            return OperationResult.from(mapper.readValue(MEMORY, Memory.class));
+        } catch (IOException e) {
+            return OperationResult.fail("An error occurred whilst trying to load internal data:\n" + e.getMessage());
+        }
     }
 
     public OperationResult<File> fileFromTerminalInput(String arg, boolean create) {

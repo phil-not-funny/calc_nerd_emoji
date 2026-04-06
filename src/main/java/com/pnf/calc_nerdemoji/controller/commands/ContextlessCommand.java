@@ -5,10 +5,6 @@ import com.pnf.calc_nerdemoji.controller.Controller;
 import com.pnf.calc_nerdemoji.view.Terminal;
 
 public class ContextlessCommand implements ICommandRunnable {
-    public static ICommandRunnable exitCommand() {
-        return new ContextlessCommand(() -> System.exit(0));
-    }
-
     public static ICommandRunnable helpCommand() {
         return new ContextlessCommand(() -> {
             Terminal.logEnum(Terminal.Level.INFO, Command.class, "Available Commands are:");

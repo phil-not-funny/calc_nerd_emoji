@@ -8,20 +8,19 @@ import org.jline.reader.EndOfFileException;
 import org.jline.reader.UserInterruptException;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.function.Function;
 
 public class Controller {
-    private CalcContext context;
     private final TerminalView view;
     private final FileController fileController;
 
-    private final CalcMemory memory = new CalcMemory();
+    private CalcContext context;
+    private Memory memory;
 
     public Controller(TerminalView view) {
         this.view = view;
         this.fileController = new FileController(this);
         this.context = CalcContext.empty();
+        this.memory = new Memory();
     }
 
     public void runCommand(ICommandRunnable runnable, String[] args) {
@@ -31,12 +30,23 @@ public class Controller {
     }
 
     public void initApp() {
-        var contextResult = fileController.loadContext();
+        var memoryResult = fileController.loadMemory();
+        if (!memoryResult.isErrored()) {
+            this.memory = memoryResult.value();
+        }
+
+        var contextResult = fileController.loadContext(memory.get(Memory.LAST_FILE, FileController.DATA));
         if (!contextResult.announcedIsErrored()) {
             this.context = contextResult.announcedValue();
             Terminal.info("Loaded session from " + FileController.DATA.getAbsolutePath());
         }
+
         view.runTerminal(this);
+    }
+
+    public void exitApp() {
+        fileController.saveMemory();
+        System.exit(0);
     }
 
     public void save() {
@@ -68,7 +78,7 @@ public class Controller {
         return fileController;
     }
 
-    public CalcMemory getMemory() {
+    public Memory getMemory() {
         return memory;
     }
 }

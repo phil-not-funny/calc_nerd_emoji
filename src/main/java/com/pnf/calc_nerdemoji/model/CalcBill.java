@@ -2,7 +2,6 @@ package com.pnf.calc_nerdemoji.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.pnf.calc_nerdemoji.view.Terminal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,31 +10,49 @@ import java.util.List;
 
 public class CalcBill {
     @JsonProperty
-    private final List<CalcDynamicField> fields;
+    private final List<ICalcValueHolder> fields;
 
-    public CalcBill() {
+    @JsonProperty
+    private final String name;
+
+    public CalcBill(String name) {
         fields = new ArrayList<>();
+        this.name = name;
     }
 
     @JsonCreator
-    private CalcBill(@JsonProperty("fields") List<CalcDynamicField> fields) {
+    private CalcBill(@JsonProperty("fields") List<ICalcValueHolder> fields, @JsonProperty("name") String name) {
         this.fields = fields;
+        this.name = name;
     }
 
-    public OperationResult<Boolean> addField(CalcDynamicField field) {
+    public OperationResult<Boolean> addField(ICalcValueHolder field) {
         return OperationResult.from(fields.add(field), OperationResult.Result.SUCCESS);
     }
 
-    public double sum(CalcValueType type) {
+    public double sum(CalcValueType type, CalcContext context) {
         double sum = 0;
-        for(CalcDynamicField f : fields) {
-           sum += f.getValue(type);
+        for (ICalcValueHolder f : fields) {
+            sum += f.getValue(type, context);
         }
         return new BigDecimal(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
-    public List<CalcDynamicField> getFields() {
+    public boolean containsCircularReference() {
+        for (ICalcValueHolder field : fields) {
+            if(field instanceof CalcBillReferenceField &&
+                    ((CalcBillReferenceField) field).calcBillKey().equalsIgnoreCase(name))
+                return true;
+        }
+        return false;
+    }
+
+    public List<ICalcValueHolder> getFields() {
         return fields;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

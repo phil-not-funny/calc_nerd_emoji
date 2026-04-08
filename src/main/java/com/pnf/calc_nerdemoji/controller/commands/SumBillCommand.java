@@ -14,7 +14,7 @@ public class SumBillCommand implements ICommandRunnable{
 
         var result = QuestionSet.of(Question.ofEnum("Calculation Type", CalcValueType.class)).prompt(controller);
 
-        Terminal.log(Terminal.Level.INFO, Double.toString(bill.sum(result.get(0, CalcValueType.class))));
+        Terminal.log(Terminal.Level.INFO, Double.toString(bill.sum(result.get(0, CalcValueType.class), controller.getContext())));
         return true;
     }
 

@@ -78,6 +78,8 @@ public class Controller {
         return input(Terminal.PREFIX + " > ");
     }
 
+    public String getDefaultBillName() { return memory.get(Memory.LAST_BILL_NAME, "fixkosten"); }
+
     public CalcContext getContext() {
         return context;
     }

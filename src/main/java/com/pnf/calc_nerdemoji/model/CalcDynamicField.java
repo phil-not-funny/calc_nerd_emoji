@@ -57,11 +57,11 @@ public class CalcDynamicField implements ICalcValueHolder {
 
     @Override
     public String toString() {
-        return "{%s; %s; %s}".formatted(name, value, type);
+        return "%s = %s (%s)".formatted(name, value, type.toPickValue());
     }
 
     @Override
-    public float getValue(CalcValueType givenType) {
+    public float getValue(CalcValueType givenType, CalcContext context) {
         return value * this.type.getMultiplicatorForType(givenType);
     }
 }

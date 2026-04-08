@@ -72,21 +72,21 @@ public class Terminal {
                 logPrimitive(ansi().a(help.getDescription()).reset().toString());
 
                 // Usage
-                if (!help.getUsage().isEmpty()) {
+                if (help.getUsage() != null && !help.getUsage().isEmpty()) {
                     logPrimitive(ansi().fg(CYAN).a("Usage:").reset().toString());
                     for (String u : help.getUsage())
                         logPrimitive(ansi().a("      " + u).reset().toString());
                 }
 
                 // Examples
-                if (!help.getExamples().isEmpty()) {
+                if (help.getExamples() != null && !help.getExamples().isEmpty()) {
                     logPrimitive(ansi().fg(CYAN).a("Examples:").reset().toString());
                     for (String e : help.getExamples())
                         logPrimitive(ansi().fg(GREEN).a("      > " + e).reset().toString());
                 }
             }
         }
-        System.out.println(ansi().fg(CYAN).bold().a("  %sEnd%s".formatted("-".repeat(26),"-".repeat(26))).reset());
+        System.out.println(ansi().fg(CYAN).bold().a("  %sEnd%s".formatted("-".repeat(28),"-".repeat(28))).reset());
     }
     
     public static final String QUESTION_PREFIX = ansi().fg(BLUE).a("      ?").reset().toString();

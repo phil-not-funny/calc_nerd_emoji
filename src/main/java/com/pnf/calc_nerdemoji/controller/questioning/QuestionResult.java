@@ -3,6 +3,10 @@ package com.pnf.calc_nerdemoji.controller.questioning;
 import java.util.List;
 
 public class QuestionResult {
+    public static QuestionResult empty() {
+        return new QuestionResult(List.of());
+    }
+
     private final List<Object> values;
 
     public QuestionResult(List<Object> values) {

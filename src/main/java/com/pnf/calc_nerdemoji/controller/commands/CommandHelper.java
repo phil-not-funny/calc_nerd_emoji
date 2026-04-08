@@ -16,7 +16,7 @@ public class CommandHelper {
                 controller,
                 Question.ofString(
                         "Bill name",
-                        controller.getMemory().get(Memory.LAST_BILL_NAME, "fixkosten"))
+                        controller.getDefaultBillName())
         );
 
         return controller.getContext().getBill(billName).announcedValue();

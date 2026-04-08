@@ -10,19 +10,26 @@ public class CalcContext {
     }
 
     @JsonProperty
-    private Map<String, CalcBill> bills = new HashMap<>();
+    private List<CalcBill> bills = new ArrayList<>();
 
     public OperationResult<CalcBill> getBill(String name) {
         Optional<CalcBill> bill = tryGetBill(name);
         if(bill.isEmpty()) {
-            CalcBill c = new CalcBill();
-            bills.put(name, c);
+            CalcBill c = new CalcBill(name);
+            bills.add(c);
             return OperationResult.from(c, OperationResult.Result.CREATED);
         } else return OperationResult.from(bill.get());
     }
 
-    private Optional<CalcBill> tryGetBill(String key) {
-        return Optional.ofNullable(bills.get(key));
+    public Optional<CalcBill> tryGetBill(String name) {
+        for (CalcBill b : bills) {
+            if(b.getName().equalsIgnoreCase(name)) return Optional.of(b);
+        }
+        return Optional.empty();
+    }
+
+    public List<CalcBill> getBills() {
+        return bills;
     }
 
     @Override

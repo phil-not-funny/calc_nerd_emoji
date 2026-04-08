@@ -10,12 +10,13 @@ public enum Command implements ITerminalPickable {
     HELP(ContextlessCommand.helpCommand(), "?", "h"),
     EXIT(SimpleCommand.exitCommand(), "bye"),
     HELLO(new SimpleOutputCommand("Hello Mr. Stark")),
-    ADD_FIELD(new AddFieldCommand(), "add"),
+    ADD_FIELD(new AddDynamicFieldCommand(), "ad"),
     SUM_BILL(new SumBillCommand(), "sum"),
-    LIST_FIELDS(new ListFieldsCommand(), "list"),
-    LOAD_CONTEXT(new LoadFileCommand(), "load", "load_file"),
+    LIST_FIELDS(new ListFieldsCommand(), "list", "ls"),
+    LOAD_CONTEXT(new LoadFileCommand(), "load"),
     SAVE_CONTEXT(new SaveFileCommand(), "save"),
-    DELETE_CONTEXT(new DeleteFileCommand(), "delete");
+    DELETE_CONTEXT(new DeleteFileCommand(), "delete", "del"),
+    ADD_REFERENCE(new AddBillReferenceCommand(), "ar");
 
     private final ICommandRunnable runner;
     private final List<String> aliases;

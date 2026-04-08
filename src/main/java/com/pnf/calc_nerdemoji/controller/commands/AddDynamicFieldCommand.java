@@ -10,9 +10,8 @@ import com.pnf.calc_nerdemoji.model.CalcValueType;
 import com.pnf.calc_nerdemoji.view.Terminal;
 
 import java.util.List;
-import java.util.Objects;
 
-public class AddFieldCommand implements ICommandRunnable {
+public class AddDynamicFieldCommand implements ICommandRunnable {
 
     @Override
     public boolean run(Controller controller, String[] args) {
@@ -25,7 +24,7 @@ public class AddFieldCommand implements ICommandRunnable {
         QuestionResult result = switch (args.length) {
             case 0 -> questions.prompt(controller);
             case 3 -> questions.fromArgs(args);
-            default -> null;
+            default -> QuestionResult.empty();
         };
 
         String name = result.get(0, String.class);
@@ -37,7 +36,6 @@ public class AddFieldCommand implements ICommandRunnable {
         CalcBill bill = CommandHelper.questionBill(controller);
         bill.addField(field);
 
-        Terminal.log(Terminal.Level.DEBUG, bill.getFields().toString());
         controller.save();
         return true;
     }

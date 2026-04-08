@@ -5,25 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class CalcDynamicField implements ICalcValueHolder {
+public class CalcDynamicField extends CalcValueHolder {
     @JsonProperty
     private float value;
     @JsonProperty
-    private final String name;
-    @JsonProperty
     private CalcValueType type;
-    @JsonProperty
-    private List<CalcCategory> category;
 
-    public static OperationResult<CalcDynamicField> createField(float value, String name, CalcValueType type, CalcCategory... categories) {
-        return OperationResult.from(new CalcDynamicField(value, name, type, categories), OperationResult.Result.CREATED);
+    public static OperationResult<CalcDynamicField> createField(float value, String name, CalcValueType type) {
+        return OperationResult.from(new CalcDynamicField(name, value, type), OperationResult.Result.CREATED);
     }
 
-    public CalcDynamicField(float value, String name, CalcValueType type, CalcCategory... categories) {
+    public CalcDynamicField(String name, float value, CalcValueType type) {
+        super(name);
         this.value = value;
-        this.name = name;
         this.type = type;
-        this.category = List.of(categories);
     }
 
     @JsonCreator
@@ -31,33 +26,20 @@ public class CalcDynamicField implements ICalcValueHolder {
             @JsonProperty("name") String name,
             @JsonProperty("value") float value,
             @JsonProperty("type") CalcValueType type,
-            @JsonProperty("category") List<CalcCategory> category
+            @JsonProperty("categories") List<CalcCategory> categories
     ) {
-        this.name = name;
+        super(name, categories);
         this.value = value;
         this.type = type;
-        this.category = category;
     }
 
     protected void setValue(int value) {
         this.value = value;
     }
 
-    public List<CalcCategory> getCategory() {
-        return category;
-    }
-
-    public void setCategory(List<CalcCategory> category) {
-        this.category = category;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     @Override
     public String toString() {
-        return "%s = %s (%s)".formatted(name, value, type.toPickValue());
+        return "%s = %s (%s)".formatted(getName(), value, type.toPickValue());
     }
 
     @Override

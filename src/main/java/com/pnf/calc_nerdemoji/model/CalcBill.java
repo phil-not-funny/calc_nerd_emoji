@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CalcBill {
     @JsonProperty
-    private final List<ICalcValueHolder> fields;
+    private final List<CalcValueHolder> fields;
 
     @JsonProperty
     private final String name;
@@ -21,33 +21,33 @@ public class CalcBill {
     }
 
     @JsonCreator
-    private CalcBill(@JsonProperty("fields") List<ICalcValueHolder> fields, @JsonProperty("name") String name) {
+    private CalcBill(@JsonProperty("fields") List<CalcValueHolder> fields, @JsonProperty("name") String name) {
         this.fields = fields;
         this.name = name;
     }
 
-    public OperationResult<Boolean> addField(ICalcValueHolder field) {
+    public OperationResult<Boolean> addField(CalcValueHolder field) {
         return OperationResult.from(fields.add(field), OperationResult.Result.SUCCESS);
     }
 
     public double sum(CalcValueType type, CalcContext context) {
         double sum = 0;
-        for (ICalcValueHolder f : fields) {
+        for (CalcValueHolder f : fields) {
             sum += f.getValue(type, context);
         }
         return new BigDecimal(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     public boolean containsCircularReference() {
-        for (ICalcValueHolder field : fields) {
+        for (CalcValueHolder field : fields) {
             if(field instanceof CalcBillReferenceField &&
-                    ((CalcBillReferenceField) field).calcBillKey().equalsIgnoreCase(name))
+                    ((CalcBillReferenceField) field).getCalcBillKey().equalsIgnoreCase(name))
                 return true;
         }
         return false;
     }
 
-    public List<ICalcValueHolder> getFields() {
+    public List<CalcValueHolder> getFields() {
         return fields;
     }
 

@@ -4,11 +4,9 @@ import com.pnf.calc_nerdemoji.controller.Controller;
 import com.pnf.calc_nerdemoji.model.CalcBill;
 import com.pnf.calc_nerdemoji.model.CalcContext;
 import com.pnf.calc_nerdemoji.model.CalcValueType;
-import com.pnf.calc_nerdemoji.model.ICalcValueHolder;
-import com.pnf.calc_nerdemoji.view.Terminal;
+import com.pnf.calc_nerdemoji.model.CalcValueHolder;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.pnf.calc_nerdemoji.view.Terminal.logPrimitive;
 import static org.fusesource.jansi.Ansi.Color.*;
@@ -33,7 +31,7 @@ public class ListFieldsCommand implements ICommandRunnable {
                 if (bill.getFields().isEmpty()) {
                     logPrimitive(ansi().a("No fields.").reset().toString());
                 } else {
-                    for (ICalcValueHolder field : bill.getFields()) {
+                    for (CalcValueHolder field : bill.getFields()) {
                         logPrimitive(ansi().fg(GREEN).a("  + ").reset().a(field.toString()).reset().toString());
                     }
                     logPrimitive(ansi().fg(CYAN).a("  Σ ").reset().bold().a("Sum Monthly: " + bill.sum(CalcValueType.MONTHLY, context)).reset().toString());

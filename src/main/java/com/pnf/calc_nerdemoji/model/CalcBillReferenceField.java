@@ -3,9 +3,20 @@ package com.pnf.calc_nerdemoji.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record CalcBillReferenceField(@JsonProperty String calcBillKey) implements ICalcValueHolder {
+import java.util.List;
+
+public class CalcBillReferenceField extends CalcValueHolder {
+    @JsonProperty
+    private final String calcBillKey;
+
     @JsonCreator
-    public CalcBillReferenceField(@JsonProperty("calcBillKey") String calcBillKey) {
+    private CalcBillReferenceField(@JsonProperty("name") String name, @JsonProperty("calcBillKey") String calcBillKey, @JsonProperty("categories") List<CalcCategory> categories) {
+        super(name, categories);
+        this.calcBillKey = calcBillKey;
+    }
+
+    public CalcBillReferenceField(String name, @JsonProperty("calcBillKey") String calcBillKey) {
+        super(name);
         this.calcBillKey = calcBillKey;
     }
 
@@ -23,5 +34,9 @@ public record CalcBillReferenceField(@JsonProperty String calcBillKey) implement
     @Override
     public String toString() {
         return "%s (bill reference)".formatted(calcBillKey);
+    }
+
+    public String getCalcBillKey() {
+        return calcBillKey;
     }
 }

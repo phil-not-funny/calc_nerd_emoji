@@ -30,7 +30,7 @@ public class AddBillReferenceCommand implements ICommandRunnable {
             return false;
         }
 
-        CalcBillReferenceField billRefField = new CalcBillReferenceField(billReference);
+        CalcBillReferenceField billRefField = new CalcBillReferenceField("relation", billReference);
         actual.addField(billRefField).announcedValue();
         controller.save();
         return true;

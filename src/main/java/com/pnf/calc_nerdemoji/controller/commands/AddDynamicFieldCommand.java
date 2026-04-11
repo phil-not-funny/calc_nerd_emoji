@@ -7,14 +7,13 @@ import com.pnf.calc_nerdemoji.controller.questioning.QuestionSet;
 import com.pnf.calc_nerdemoji.model.CalcBill;
 import com.pnf.calc_nerdemoji.model.CalcDynamicField;
 import com.pnf.calc_nerdemoji.model.CalcValueType;
-import com.pnf.calc_nerdemoji.view.Terminal;
 
 import java.util.List;
 
 public class AddDynamicFieldCommand implements ICommandRunnable {
 
     @Override
-    public boolean run(Controller controller, String[] args) {
+    public boolean run(Controller controller, String[] args, char[] modifiers) {
         QuestionSet questions = QuestionSet.of(
                 Question.ofString("Field Name"),
                 Question.ofFloat("Field Value"),
@@ -41,7 +40,7 @@ public class AddDynamicFieldCommand implements ICommandRunnable {
     }
 
     @Override
-    public boolean preChecks(Controller controller, String[] args) {
+    public boolean preChecks(Controller controller, String[] args, char[] modifiers) {
         return CommandHelper.requireArgsLength(args, 0, 3);
     }
 

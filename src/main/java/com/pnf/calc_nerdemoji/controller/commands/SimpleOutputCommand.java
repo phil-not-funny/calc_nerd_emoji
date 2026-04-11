@@ -9,13 +9,13 @@ public class SimpleOutputCommand implements ICommandRunnable {
     public SimpleOutputCommand(String message) { this.message = message; }
 
     @Override
-    public boolean run(Controller controller, String[] args) {
+    public boolean run(Controller controller, String[] args, char[] modifiers) {
         Terminal.log(Terminal.Level.OK, message);
         return true;
     }
 
     @Override
-    public boolean preChecks(Controller controller, String[] args) {
+    public boolean preChecks(Controller controller, String[] args, char[] modifiers) {
         return true;
     }
 

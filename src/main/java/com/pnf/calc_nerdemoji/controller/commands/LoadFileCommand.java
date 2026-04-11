@@ -8,7 +8,7 @@ import java.io.File;
 
 public class LoadFileCommand implements ICommandRunnable {
     @Override
-    public boolean run(Controller controller, String[] args) {
+    public boolean run(Controller controller, String[] args, char[] modifiers) {
         OperationResult<File> fileResult = controller.getFileController().fileFromTerminalInput(args[0], false);
         fileResult.log();
         if(fileResult.isErrored()) return false;
@@ -19,7 +19,7 @@ public class LoadFileCommand implements ICommandRunnable {
     }
 
     @Override
-    public boolean preChecks(Controller controller, String[] args) {
+    public boolean preChecks(Controller controller, String[] args, char[] modifiers) {
         return CommandHelper.requireArgsLength(args, 1);
     }
 

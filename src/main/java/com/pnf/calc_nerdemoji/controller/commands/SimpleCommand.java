@@ -16,13 +16,13 @@ public class SimpleCommand implements ICommandRunnable {
     }
 
     @Override
-    public boolean run(Controller controller, String[] args) {
+    public boolean run(Controller controller, String[] args, char[] modifiers) {
         runner.accept(controller);
         return true;
     }
 
     @Override
-    public boolean preChecks(Controller controller, String[] args) {
+    public boolean preChecks(Controller controller, String[] args, char[] modifiers) {
         return true;
     }
 

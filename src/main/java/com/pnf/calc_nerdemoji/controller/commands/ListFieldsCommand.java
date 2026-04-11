@@ -14,7 +14,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class ListFieldsCommand implements ICommandRunnable {
     @Override
-    public boolean run(Controller controller, String[] args) {
+    public boolean run(Controller controller, String[] args, char[] modifiers) {
         CalcContext context = controller.getContext();
 
         System.out.println(ansi().fg(CYAN).bold().a("  Bills & Fields").reset());
@@ -46,7 +46,7 @@ public class ListFieldsCommand implements ICommandRunnable {
     }
 
     @Override
-    public boolean preChecks(Controller controller, String[] args) {
+    public boolean preChecks(Controller controller, String[] args, char[] modifiers) {
         return true;
     }
 

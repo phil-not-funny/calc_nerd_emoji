@@ -51,12 +51,12 @@ public class TerminalView {
 
             line = line.trim();
             if (line.isBlank()) continue;
-            String[] parts = line.split(" ");
 
             try {
-                Command command = Commands.fromInput(parts[0]);
-                String[] args = Arrays.copyOfRange(parts, 1, parts.length);
-                controller.runCommand(command.getRunner(), args);
+                Commands.PartedCommand cmdParts = Commands.splitInput(line);
+
+                Command command = Commands.fromInput(cmdParts.command());
+                controller.runCommand(command.getRunner(), cmdParts.args(), cmdParts.modifiers());
             } catch(Exception e) {
                 com.pnf.calc_nerdemoji.view.Terminal.error(e.getMessage());
             }

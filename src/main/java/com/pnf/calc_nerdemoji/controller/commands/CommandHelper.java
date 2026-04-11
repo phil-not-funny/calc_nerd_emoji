@@ -42,5 +42,23 @@ public class CommandHelper {
         return false;
     }
 
+    protected static boolean requireValidModifiers(char[] given, char... actual) {
+        boolean any = false;
+        for (char g : given) {
+            boolean valid = false;
+            for (char a : actual) {
+                if (g == a) {
+                    valid = true;
+                    any = true;
+                    break;
+                }
+            }
 
+            if (!valid)
+                Terminal.warn("Unknown modifier: '%s'".formatted(g));
+        }
+        if(!any)
+            Terminal.error("No modifiers matched! Aborting command... Try \"help\".");
+        return any;
+    }
 }

@@ -23,9 +23,9 @@ public class Controller {
         this.memory = new Memory(this);
     }
 
-    public void runCommand(ICommandRunnable runnable, String[] args) {
-        if (runnable.preChecks(this, args))
-            if (!runnable.run(this, args))
+    public void runCommand(ICommandRunnable runnable, String[] args, char[] modifiers) {
+        if (runnable.preChecks(this, args, modifiers))
+            if (!runnable.run(this, args, modifiers))
                 Terminal.error("Command execution failed");
     }
 

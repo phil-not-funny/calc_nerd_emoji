@@ -9,7 +9,7 @@ import com.pnf.calc_nerdemoji.view.Terminal;
 
 public class SumBillCommand implements ICommandRunnable{
     @Override
-    public boolean run(Controller controller, String[] args) {
+    public boolean run(Controller controller, String[] args, char[] modifiers) {
         CalcBill bill = CommandHelper.questionBill(controller);
 
         var result = QuestionSet.of(Question.ofEnum("Calculation Type", CalcValueType.class)).prompt(controller);
@@ -19,7 +19,7 @@ public class SumBillCommand implements ICommandRunnable{
     }
 
     @Override
-    public boolean preChecks(Controller controller, String[] args) {
+    public boolean preChecks(Controller controller, String[] args, char[] modifiers) {
         return true;
     }
 

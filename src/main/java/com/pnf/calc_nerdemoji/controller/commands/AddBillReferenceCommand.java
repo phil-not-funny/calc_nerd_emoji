@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AddBillReferenceCommand implements ICommandRunnable {
     @Override
-    public boolean run(Controller controller, String[] args) {
+    public boolean run(Controller controller, String[] args, char[] modifiers) {
         QuestionSet questions = QuestionSet.of(
                 Question.ofString("billReference", controller.getDefaultBillName())
         );
@@ -37,7 +37,7 @@ public class AddBillReferenceCommand implements ICommandRunnable {
     }
 
     @Override
-    public boolean preChecks(Controller controller, String[] args) {
+    public boolean preChecks(Controller controller, String[] args, char[] modifiers) {
         return CommandHelper.requireArgsLength(args, 0, 1);
     }
 

@@ -30,13 +30,16 @@ public class CalcBill {
         return OperationResult.from(fields.add(field), OperationResult.Result.SUCCESS);
     }
 
-    public double sum(CalcValueType type, CalcContext context) {
+    public double sum(CalcValueType type, CalcContext context, CalcCategory category) {
         double sum = 0;
         for (CalcValueHolder f : fields) {
-            sum += f.getValue(type, context);
+            if(category == null || f.hasCategory(category))
+                sum += f.getValue(type, context);
         }
         return new BigDecimal(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
+
+    public double sum(CalcValueType type, CalcContext context) { return sum(type, context, null); }
 
     public boolean containsCircularReference() {
         for (CalcValueHolder field : fields) {
@@ -45,6 +48,10 @@ public class CalcBill {
                 return true;
         }
         return false;
+    }
+
+    public boolean removeField(CalcValueHolder field) {
+        return fields.remove(field);
     }
 
     public List<CalcValueHolder> getFields() {

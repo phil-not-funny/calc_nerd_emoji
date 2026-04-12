@@ -65,7 +65,8 @@ public class Controller {
     public boolean loadContext(File file) {
         var contextResult = fileController.loadContext(file);
         if (!contextResult.announcedIsErrored()) {
-            this.context = contextResult.announcedValue();
+            context = contextResult.announcedValue();
+            context.resolveAll();
             return true;
         }
         return false;

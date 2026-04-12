@@ -2,6 +2,7 @@ package com.pnf.calc_nerdemoji.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.pnf.calc_nerdemoji.controller.ITerminalPickable;
 
 import java.util.Objects;

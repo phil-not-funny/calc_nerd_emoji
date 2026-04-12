@@ -30,6 +30,12 @@ public abstract class CalcValueHolder {
         categories = new ArrayList<>();
     }
 
+    protected CalcValueHolder(String name, List<String> categories, List<CalcCategory> resolvedCategories) {
+        this.name = name;
+        this.categories = categories;
+        this.resolvedCategories = resolvedCategories;
+    }
+
     public List<CalcCategory> resolveCategories(CalcContext context) {
         return resolvedCategories = new ArrayList<>(categories.stream()
                 .map(context::tryGetCategory)
@@ -49,7 +55,16 @@ public abstract class CalcValueHolder {
         resolvedCategories.add(category);
     }
 
+    @JsonIgnore
     public List<CalcCategory> getCategories() {
         return resolvedCategories;
+    }
+
+    public List<CalcCategory> getFilteredCategories(CalcCategory category) {
+        return resolvedCategories.stream().filter(c -> c.equals(category)).toList();
+    }
+
+    public boolean hasCategory(CalcCategory category) {
+        return resolvedCategories.stream().anyMatch(c -> c.equals(category));
     }
 }

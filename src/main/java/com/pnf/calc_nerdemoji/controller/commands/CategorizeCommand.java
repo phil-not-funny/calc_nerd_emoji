@@ -32,8 +32,6 @@ public class CategorizeCommand implements ICommandRunnable {
         CalcCategory category = result.get(0, CalcCategory.class);
         String search = result.get(1, String.class);
 
-        Terminal.debug(category.toString());
-
         long affected = bill.getFields().stream()
                 .filter(field -> isFieldValid(field, search, r, s, i))
                 .peek(field -> field.addCategory(category))

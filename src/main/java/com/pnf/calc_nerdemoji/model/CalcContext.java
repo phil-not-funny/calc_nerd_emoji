@@ -3,6 +3,7 @@ package com.pnf.calc_nerdemoji.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CalcContext {
     public static CalcContext empty() {

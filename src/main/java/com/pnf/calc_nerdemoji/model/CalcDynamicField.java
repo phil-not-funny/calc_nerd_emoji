@@ -26,7 +26,7 @@ public class CalcDynamicField extends CalcValueHolder {
             @JsonProperty("name") String name,
             @JsonProperty("value") float value,
             @JsonProperty("type") CalcValueType type,
-            @JsonProperty("categories") List<CalcCategory> categories
+            @JsonProperty("categories") List<String> categories
     ) {
         super(name, categories);
         this.value = value;

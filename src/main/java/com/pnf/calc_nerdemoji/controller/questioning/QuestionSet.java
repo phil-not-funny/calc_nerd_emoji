@@ -1,6 +1,7 @@
 package com.pnf.calc_nerdemoji.controller.questioning;
 
 import com.pnf.calc_nerdemoji.controller.Controller;
+import com.pnf.calc_nerdemoji.controller.exceptions.UnknownOptionException;
 import com.pnf.calc_nerdemoji.view.Terminal;
 import com.pnf.calc_nerdemoji.view.TerminalView;
 
@@ -70,7 +71,7 @@ public class QuestionSet {
             }
 
             try {
-                return question.getParser().apply(input);
+                return parse(question, input);
             } catch (IllegalArgumentException e) {
                 Terminal.log(Terminal.Level.ERROR, e.getMessage());
             }
@@ -80,7 +81,7 @@ public class QuestionSet {
     private <T> T parseSingle(Question<T> question, String arg) {
         if (arg.isEmpty() && question.hasDefault())
             return question.getDefaultValue();
-        return question.getParser().apply(arg); // throws if invalid, let command handle it
+        return parse(question, arg); // throws if invalid, let command handle it
     }
 
     private String formatPrompt(Question<?> question) {
@@ -94,5 +95,14 @@ public class QuestionSet {
                     question.getTypeName(),
                     defaultPart
             );
+    }
+
+    private <T> T parse(Question<T> question, String input) {
+        try {
+            return question.getParser().apply(input);
+        } catch (UnknownOptionException e) {
+            Terminal.debug("Fallback applied");
+            return question.getFallback().apply(input);
+        }
     }
 }

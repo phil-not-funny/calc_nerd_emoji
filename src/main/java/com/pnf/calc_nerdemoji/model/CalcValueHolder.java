@@ -1,12 +1,10 @@
 package com.pnf.calc_nerdemoji.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "holderType")
 @JsonSubTypes({
@@ -17,10 +15,12 @@ public abstract class CalcValueHolder {
     @JsonProperty
     private final String name;
     @JsonProperty
-    private List<CalcCategory> categories;
+    private final List<String> categories;
+    @JsonIgnore
+    private List<CalcCategory> resolvedCategories = new ArrayList<>();
 
     @JsonCreator
-    protected CalcValueHolder(@JsonProperty("name") String name, @JsonProperty("categories") List<CalcCategory> categories) {
+    protected CalcValueHolder(@JsonProperty("name") String name, @JsonProperty("categories") List<String> categories) {
         this.name = name;
         this.categories = categories;
     }
@@ -30,6 +30,14 @@ public abstract class CalcValueHolder {
         categories = new ArrayList<>();
     }
 
+    public List<CalcCategory> resolveCategories(CalcContext context) {
+        return resolvedCategories = new ArrayList<>(categories.stream()
+                .map(context::tryGetCategory)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList());
+    }
+
     abstract float getValue(CalcValueType type, CalcContext context);
 
     public String getName() {
@@ -37,10 +45,11 @@ public abstract class CalcValueHolder {
     }
 
     public void addCategory(CalcCategory category) {
-        categories.add(category);
+        categories.add(category.name());
+        resolvedCategories.add(category);
     }
 
     public List<CalcCategory> getCategories() {
-        return categories;
+        return resolvedCategories;
     }
 }

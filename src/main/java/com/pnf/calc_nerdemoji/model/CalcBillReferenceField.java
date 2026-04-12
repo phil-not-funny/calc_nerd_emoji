@@ -10,7 +10,7 @@ public class CalcBillReferenceField extends CalcValueHolder {
     private final String calcBillKey;
 
     @JsonCreator
-    private CalcBillReferenceField(@JsonProperty("name") String name, @JsonProperty("calcBillKey") String calcBillKey, @JsonProperty("categories") List<CalcCategory> categories) {
+    private CalcBillReferenceField(@JsonProperty("name") String name, @JsonProperty("calcBillKey") String calcBillKey, @JsonProperty("categories") List<String> categories) {
         super(name, categories);
         this.calcBillKey = calcBillKey;
     }

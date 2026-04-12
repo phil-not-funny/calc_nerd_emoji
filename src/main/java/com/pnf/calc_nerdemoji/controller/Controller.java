@@ -44,7 +44,8 @@ public class Controller {
 
         var contextResult = fileController.loadContext(startFile);
         if (!contextResult.announcedIsErrored()) {
-            this.context = contextResult.announcedValue();
+            context = contextResult.announcedValue();
+            context.resolveAll();
             Terminal.info("Loaded session from " + memory.get(Memory.LAST_FILE));
         }
 

@@ -26,8 +26,17 @@ public class Commands {
         List<String> args = new ArrayList<>();
         char[] modifiers = new char[0];
         for (String addition : additions) {
-            if (addition.startsWith("-") && modifiers.length == 0)
-                modifiers = addition.substring(1).toCharArray();
+            if (addition.startsWith("-")) {
+                final char[] newModifiers = addition.substring(1).toCharArray();
+                if (modifiers.length == 0) {
+                    modifiers = newModifiers;
+                } else {
+                    char[] merged = new char[modifiers.length + newModifiers.length];
+                    System.arraycopy(modifiers, 0, merged, 0, modifiers.length);
+                    System.arraycopy(newModifiers, 0, merged, modifiers.length, newModifiers.length);
+                    modifiers = merged;
+                }
+            }
             else
                 args.add(addition.replaceAll("\"", ""));
         }

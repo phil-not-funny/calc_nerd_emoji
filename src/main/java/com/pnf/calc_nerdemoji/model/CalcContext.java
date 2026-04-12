@@ -12,6 +12,9 @@ public class CalcContext {
     @JsonProperty
     private List<CalcBill> bills = new ArrayList<>();
 
+    @JsonProperty
+    private List<CalcCategory> categories = new ArrayList<>();
+
     public OperationResult<CalcBill> getBill(String name) {
         Optional<CalcBill> bill = tryGetBill(name);
         if(bill.isEmpty()) {
@@ -37,5 +40,28 @@ public class CalcContext {
         return "CalcContext{" +
                 "bills=" + bills +
                 '}';
+    }
+
+    public Optional<CalcCategory> tryGetCategory(String name) {
+        for (CalcCategory c : categories) {
+            if(c.name().equalsIgnoreCase(name)) return Optional.of(c);
+        }
+        return Optional.empty();
+    }
+
+    public void resolveAll() {
+        for (CalcBill bill : bills) {
+            for (CalcValueHolder field : bill.getFields()) {
+                field.resolveCategories(this);
+            }
+        }
+    }
+
+    public List<CalcCategory> getCategories() {
+        return categories;
+    }
+
+    public void addCategory(CalcCategory c) {
+        categories.add(c);
     }
 }

@@ -43,6 +43,8 @@ public class CommandHelper {
     }
 
     protected static boolean requireValidModifiers(char[] given, char... actual) {
+        if(given.length == 0) return true;
+
         boolean any = false;
         for (char g : given) {
             boolean valid = false;
@@ -60,5 +62,9 @@ public class CommandHelper {
         if(!any)
             Terminal.error("No modifiers matched! Aborting command... Try \"help\".");
         return any;
+    }
+
+    protected static boolean hasModifier(char[] given, char desired) {
+        return String.valueOf(given).indexOf(desired) >= 0;
     }
 }
